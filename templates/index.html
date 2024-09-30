@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prostate Cancer Classification | MSc Thesis Kourkouta Korina</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            max-width: 1200px;
+            margin: auto;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            background-color: #fff;
+        }
+        .upload-section {
+            flex: 1;
+            padding: 30px;
+            border-right: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        .welcome-message {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 18px;
+            color: #6497b1;
+        }
+        input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #6497b1;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            color: #555;
+            background-color: #f9f9f9;
+        }
+        button {
+            background-color: #6497b1;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #5753e3;
+        }
+        .result {
+            margin-top: 20px;
+            text-align: left;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 12px;
+            width: 100%;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .chat-section {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            background-color: #fafafa;
+        }
+        .chat {
+            flex: 1;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 12px;
+            max-height: 80vh;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .chat p {
+            margin: 8px 0;
+            font-size: 14px;
+            line-height: 1.6;
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 75%;
+            transition: opacity 0.5s ease;
+        }
+        .chat p.user {
+            background-color: #d1e7dd;
+            align-self: flex-end;
+            opacity: 0;
+        }
+        .chat p.ai {
+            background-color: #e2e3e5;
+            align-self: flex-start;
+            opacity: 0;
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        input[type="text"] {
+            display: block;
+            flex: 1;
+            padding: 12px;
+            margin-right: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus {
+            border-color: #6497b1;
+            outline: none;
+        }
+        button.send {
+            width: 30%;
+            height: 100%;
+            font-size: 16px;
+        }
+        .loading {
+            display: none;
+            margin: 20px 0;
+            font-size: 16px;
+            color: #6497b1;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+            }
+            .upload-section, .chat-section {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            button, input[type="file"], input[type="text"] {
+                padding: 12px;
+                font-size: 16px;
+            }
+        }
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 18px;
+            }
+            button, input[type="file"], input[type="text"] {
+                padding: 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="upload-section">
+            <h1>Prostate Cancer Classification | MSc Thesis Kourkouta Korina</h1>
+            <form id="upload-form" enctype="multipart/form-data">
+                <input type="file" id="file-input" name="file" accept="image/*" required>
+                <button type="submit">Upload and Classify</button>
+            </form>
+            <img id="uploaded-image" src="" alt="Uploaded Image" style="display: none;">
+            <div class="result" id="result"></div>
+        </div>
+        <div class="chat-section">
+            <div class="chat" id="chat"></div>
+            <div class="loading" id="loading">Loading...</div>
+            <div class="input-container">
+                <form id="chat-form" style="flex: 1; display: flex;">
+                    <input type="text" id="user-input" placeholder="Type your message..." required>
+                    <button type="submit" class="send">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <audio id="send-sound" src="send.mp3" preload="auto"></audio>
+    <audio id="receive-sound" src="receive.mp3" preload="auto"></audio>
+
+    <script>
+        let messageCount = 0;
+
+        function addWelcomeMessage() {
+            const chat = document.getElementById('chat');
+            chat.innerHTML += `
+                <p class="ai"><strong>System:</strong> Welcome to Prostate Cancer Classification with AI! Just upload your image and start the chat.</p>
+            `;
+            animateMessage(chat.lastElementChild);
+        }
+
+        document.getElementById('upload-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fileInput = document.getElementById('file-input');
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            const loadingIndicator = document.getElementById('loading');
+            loadingIndicator.style.display = 'block';
+
+            document.getElementById('chat').innerHTML = '';
+            messageCount = 0;
+            addWelcomeMessage();
+
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            const uploadedImage = document.getElementById('uploaded-image');
+            uploadedImage.src = URL.createObjectURL(fileInput.files[0]);
+            uploadedImage.style.display = 'block';
+
+            document.getElementById('result').innerHTML = `
+                <p><strong>Predictions:</strong> ${result.predictions}</p>
+            `;
+
+            const chat = document.getElementById('chat');
+            chat.innerHTML += `
+                <p class="ai"><strong>AI Analysis:</strong> ${result.response} <span class="loading-icon">🔄</span></p>
+            `;
+            playSound('receive-sound');
+            animateMessage(chat.lastElementChild);
+
+            loadingIndicator.style.display = 'none';
+        });
+
+        document.getElementById('chat-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const userInput = document.getElementById('user-input').value;
+            const chat = document.getElementById('chat');
+
+            chat.innerHTML += `<p class="user"><strong>You:</strong> ${userInput}</p>`;
+            playSound('send-sound');
+            animateMessage(chat.lastElementChild);
+
+            document.getElementById('user-input').value = '';
+            messageCount++;
+
+            const loadingIndicator = document.getElementById('loading');
+            loadingIndicator.style.display = 'block';
+
+            // Wait for 1 second before responding
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            const response = await fetch('/get_response', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userInput })
+            });
+
+            const result = await response.json();
+            loadingIndicator.style.display = 'none';
+
+            chat.innerHTML += `<p class="ai"><strong>AI:</strong> ${result.response}</p>`;
+            playSound('receive-sound');
+            animateMessage(chat.lastElementChild);
+        });
+
+        function animateMessage(element) {
+            element.style.opacity = '0';
+            setTimeout(() => {
+                element.style.opacity = '1';
+            }, 100);
+        }
+
+        function playSound(soundId) {
+            const sound = document.getElementById(soundId);
+            sound.currentTime = 0;
+            sound.play();
+        }
+
+        addWelcomeMessage();
+    </script>
+</body>
+</html>
