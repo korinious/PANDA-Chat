@@ -3,7 +3,7 @@
 This project provides an API for image classification using TensorFlow's EfficientNetV2 model and a chatbot powered by OpenAI GPT.
 
 ## Features
-- Image classification with EfficientNetV2 to classify Gleason scores.
+- Image classification with EfficientNetV2 to classify ISUP scores.
 - Chatbot interface powered by OpenAI GPT for conversation and insights.
 
 ## Prerequisites
