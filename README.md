@@ -1,4 +1,4 @@
-# Flask OpenAI & Image Classification Project
+# Flask OpenAI & Image Classification Project | MSc Thesis 2024
 
 This project provides an API for image classification using TensorFlow's EfficientNetV2 model and a chatbot powered by OpenAI GPT.
 
